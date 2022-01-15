@@ -7,3 +7,4 @@ services:
     volumes:
       - .:/app/
     command: python3 /app/telegram-bot.py
+    env_file: .env
