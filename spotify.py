@@ -28,3 +28,8 @@ class Spotify:
 
         album = results["tracks"]["items"][0]["album"]["external_urls"]["spotify"]
         return album
+
+
+if __name__ == "__main__":
+    sp = Spotify()
+    print(sp.get_url("Geogaddi Boards of Canada"))

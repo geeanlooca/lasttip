@@ -41,8 +41,11 @@ def start(update: telegram.Update, context: telegram.ext.CallbackContext):
         )
 
     random_album = str(lastfm.pick_random(playcount_min=20))
+
+    # remove the dash symbol to get better spotify results
     try:
-        message = spotify.get_url(random_album)
+        spotify_query = random_album.replace("-", "")
+        message = spotify.get_url(spotify_query)
     except IndexError:
         message = random_album
 
