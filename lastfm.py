@@ -47,6 +47,10 @@ class LastFm:
 
         return albums
 
+    def cached(self):
+        with shelve.open("cache.shelve") as d:
+            return "albums" in d
+
     def clear_cache(self):
         logger.debug("Clearing cache")
         with shelve.open("cache.shelve") as d:

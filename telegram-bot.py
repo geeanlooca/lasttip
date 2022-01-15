@@ -34,6 +34,12 @@ def ping(update: telegram.Update, context: telegram.ext.CallbackContext):
 
 def start(update: telegram.Update, context: telegram.ext.CallbackContext):
     """Get a random album from my last.fm profile."""
+
+    if not lastfm.cached():
+        context.bot.send_message(
+            chat_id=update.effective_chat.id, text="Building cache first..."
+        )
+
     random_album = str(lastfm.pick_random(playcount_min=20))
     try:
         message = spotify.get_url(random_album)
