@@ -45,7 +45,9 @@ def start(update: telegram.Update, context: telegram.ext.CallbackContext):
     # remove the dash symbol to get better spotify results
     try:
         spotify_query = random_album.replace("-", "")
-        message = spotify.get_url(spotify_query)
+        result = spotify.get_url(spotify_query)
+
+        message = f"[{random_album}]({result})"
     except IndexError:
         message = random_album
 
