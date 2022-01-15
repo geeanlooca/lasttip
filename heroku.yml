@@ -1,8 +1,5 @@
-setup:
-  config:
-    env_file: .env
 build:
   docker:
     web: Dockerfile
 run:
-  web: python3 /app/telegram-bot.py
+  web: python3 /app/telegram-bot.py --production
