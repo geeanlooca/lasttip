@@ -32,6 +32,18 @@ def ping(update: telegram.Update, context: telegram.ext.CallbackContext):
     context.bot.send_message(chat_id=update.effective_chat.id, text="I'm alive")
 
 
+def escape(msg):
+    return msg.translate(
+        str.maketrans(
+            {
+                "*": r"\*",
+                "_": r"\_",
+                "~": r"\~",
+            }
+        )
+    )
+
+
 def start(update: telegram.Update, context: telegram.ext.CallbackContext):
     """Get a random album from my last.fm profile."""
 
@@ -51,7 +63,9 @@ def start(update: telegram.Update, context: telegram.ext.CallbackContext):
     except IndexError:
         message = random_album
 
-    context.bot.send_message(chat_id=update.effective_chat.id, text=message)
+    context.bot.send_message(
+        chat_id=update.effective_chat.id, text=escape(message), parse_mode="MarkdownV2"
+    )
 
 
 def clear_cache(update: telegram.Update, context: telegram.ext.CallbackContext):
