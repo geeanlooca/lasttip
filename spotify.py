@@ -1,4 +1,3 @@
-import dotenv
 import requests
 
 import spotipy
@@ -33,3 +32,4 @@ class Spotify:
 if __name__ == "__main__":
     sp = Spotify()
     print(sp.get_url("Geogaddi Boards of Canada"))
+    print(sp.get_url("LONG.LIVE.A$AP Deluxe Version A$AP ROCKY"))

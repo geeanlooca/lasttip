@@ -3,7 +3,6 @@ import argparse
 import logging
 import random
 import requests
-import dotenv
 from dataclasses import dataclass
 import shelve
 
