@@ -1,4 +1,4 @@
-version: '1'
+version: '3.3'
 services:
   lasttip:
     build: .
@@ -8,3 +8,10 @@ services:
       - .:/app/
     command: python3 /app/telegram-bot.py
     env_file: .env
+
+  testing:
+    build: .
+    env_file: .env
+    volumes:
+      - .:/app/
+    command: python3 spotify.py
