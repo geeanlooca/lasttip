@@ -1,7 +1,0 @@
-version: '1'
-services:
-  lasttip:
-    build: .
-    image: lasttip
-    env_file: .env
-    command: python3 /app/telegram-bot.py --production

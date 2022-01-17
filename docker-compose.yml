@@ -1,17 +1,14 @@
 version: '3.3'
 services:
-  lasttip:
-    build: .
-    image: lasttip
+  test:
+    build: ./Dockerfile.dev
     env_file: .env
     volumes:
-      - .:/app/
-    command: python3 /app/telegram-bot.py
-    env_file: .env
+      - .:/package
 
-  testing:
+    command: pytest /package/tests
+
+  bot:
     build: .
     env_file: .env
-    volumes:
-      - .:/app/
-    command: python3 spotify.py
+    command: lasttip

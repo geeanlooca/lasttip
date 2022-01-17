@@ -13,9 +13,6 @@ logging.basicConfig(
 )
 logger = logging.getLogger(__name__)
 
-API_KEY = os.environ["LASTFM_API_KEY"]
-API_SECRET = os.environ["LASTFM_SHARED_SECRET"]
-
 
 @dataclass
 class Album:
@@ -25,13 +22,15 @@ class Album:
     playcount: int
 
     def __str__(self):
-        return f"{self.name} - {self.artist}"
+        return f"{self.artist} - {self.name}"
 
 
 class LastFm:
-    def __init__(self, user):
+    def __init__(self, user, secret, key):
         self.url = "https://ws.audioscrobbler.com/2.0/"
         self.user = user
+        self.key = key
+        self.secret = secret
 
     def fetch(self, playcount_min=None, clear_cache=False):
 
@@ -79,7 +78,7 @@ class LastFm:
         return albums
 
     def get_top_albums(self, page=1, limit=250):
-        method_string = f"?method=user.gettopalbums&user={self.user}&api_key={API_KEY}&format=json&page={page}&limit={limit}"
+        method_string = f"?method=user.gettopalbums&user={self.user}&api_key={self.key}&format=json&page={page}&limit={limit}"
         request_url = self.url + method_string
 
         logger.debug(request_url)
