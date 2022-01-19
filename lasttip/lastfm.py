@@ -26,7 +26,7 @@ class Album:
 
 
 class LastFm:
-    def __init__(self, user, secret, key):
+    def __init__(self, user, key, secret):
         self.url = "https://ws.audioscrobbler.com/2.0/"
         self.user = user
         self.key = key
@@ -102,8 +102,6 @@ class LastFm:
         except KeyError as e:
             logger.error(f"KeyError: {e}")
             logger.error(json)
-
-
 
     def pick_random(self, playcount_max=None, playcount_min=None):
 
