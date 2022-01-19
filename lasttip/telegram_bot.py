@@ -49,14 +49,14 @@ class TelegramLastFmBot:
             parse_mode="MarkdownV2",
         )
 
-    def run(self, webhook=None, port=None):
+    def run(self, webhook=None, port: int = None):
 
         if webhook:
             # run on heroku
             logging.info("Running for production using webhooks")
             self.updater.start_webhook(
                 listen="0.0.0.0",
-                port=port if port else 5000,
+                port=port,
                 url_path=self.token,
                 webhook_url=f"https://lasttip.herokuapp.com/{self.token}",
             )
@@ -173,7 +173,7 @@ def main():
 
     BOT_TOKEN = os.environ["BOT_TOKEN"]
     LASTFM_USER = os.environ["LASTFM_USER"]
-    PORT = os.environ.get("PORT", 5000)
+    PORT = int(os.environ.get("PORT", "8443"))
     SPOTIFY_CLIENT_ID = os.environ["SPOTIFY_CLIENT_ID"]
     SPOTIFY_CLIENT_SECRET = os.environ["SPOTIFY_CLIENT_SECRET"]
     API_KEY = os.environ["LASTFM_API_KEY"]

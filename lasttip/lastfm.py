@@ -87,17 +87,23 @@ class LastFm:
 
         json = response.json()
 
-        data = json["topalbums"]["album"]
-        metadata = json["topalbums"]["@attr"]
+        try:
+            data = json["topalbums"]["album"]
+            metadata = json["topalbums"]["@attr"]
+            albums = []
+            for album_data in data:
+                artist_name = album_data["artist"]["name"]
+                album_name = album_data["name"]
+                playcount = int(album_data["playcount"])
+                album = Album(name=album_name, artist=artist_name, playcount=playcount)
+                albums.append(album)
+            return albums, metadata
 
-        albums = []
-        for album_data in data:
-            artist_name = album_data["artist"]["name"]
-            album_name = album_data["name"]
-            playcount = int(album_data["playcount"])
-            album = Album(name=album_name, artist=artist_name, playcount=playcount)
-            albums.append(album)
-        return albums, metadata
+        except KeyError as e:
+            logger.error(f"KeyError: {e}")
+            logger.error(json)
+
+
 
     def pick_random(self, playcount_max=None, playcount_min=None):
 
