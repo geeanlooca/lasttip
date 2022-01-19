@@ -34,8 +34,6 @@ class TelegramLastFmBot:
     def request(self, update, context):
         message = update.message.text.replace("/request ", "")
 
-        # context.bot.send_message(chat_id=update.effective_chat.id, text=message)
-
         context.bot.send_message(
             chat_id=update.effective_chat.id,
             text=TelegramLastFmBot.escape(message),
@@ -75,7 +73,7 @@ class TelegramLastFmBot:
 
     @staticmethod
     def escape(msg):
-        reserved_chars = ["*", "_", "~", "-", "(", ")", ".", "!"]
+        reserved_chars = ["*", "_", "~", "-", "(", ")", ".", "!", "+"]
 
         return msg.translate(str.maketrans({c: fr"\{c}" for c in reserved_chars}))
 
@@ -122,6 +120,11 @@ class TelegramLastFmBot:
         except telegram.error.BadRequest as bad_request:
             logging.error(f"BadRequest: {bad_request.message}")
             logging.error(f"BadRequest: {message}")
+
+            context.bot.send_message(
+                chat_id=update.effective_chat.id,
+                text=f"BadRequest: {bad_request.message} for album {str(random_album)}",
+            )
 
         # send a list of alternative albums by the same artist
         albums_msg = ""
