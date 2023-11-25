@@ -1,6 +1,6 @@
+Flask>=2.2.2
+gunicorn==20.0.4
 spotipy
-python-telegram-bot
 pytest
 python-dotenv
-Flask
 black
