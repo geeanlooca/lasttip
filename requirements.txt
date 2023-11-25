@@ -2,3 +2,5 @@ spotipy
 python-telegram-bot
 pytest
 python-dotenv
+Flask
+black
