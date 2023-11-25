@@ -1,0 +1,131 @@
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  background-color: #f7f7f7;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+
+.container {
+  display: flex;
+    flex-direction: column; /* Change to column to stack content vertically */
+  align-items: center; /* Center content horizontally */
+}
+
+.sidebar {
+  padding: 20px;
+  background-color: #f0f0f0;
+  border-radius: 8px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  flex: 1;
+  max-width: 400px; /* Adjust the max-width as needed */
+}
+
+.album-list {
+/* dotted items*/
+  list-style-type: square;   
+  padding: 10;
+}
+
+.album-list li {
+  margin-bottom: 10px;
+}
+
+.album-list li a {
+  text-decoration: none;
+  color: #007bff;
+  font-weight: bold;
+}
+
+.album-list li a:hover {
+  text-decoration: underline;
+}
+
+.album-info {
+  width: 700px;
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  display: flex;
+  align-items: center;
+  padding: 20px;
+  margin-left: 20px; /* Add some spacing between sidebar and album-info */
+}
+
+.cover-art {
+  width: 300px;
+  height: 300px;
+  border-radius: 4px;
+  margin-right: 20px;
+}
+
+.details {
+  flex: 1;
+}
+
+.album-title {
+  font-size: 24px;
+  margin: 0;
+  margin-bottom: 5px;
+}
+
+.artist {
+  font-size: 16px;
+  color: #888;
+  margin: 0;
+  margin-bottom: 15px;
+}
+
+.spotify-link {
+  display: block;
+  text-decoration: none;
+  color: #fff;
+  background-color: #1db954;
+  padding: 10px 15px;
+  border-radius: 4px;
+  text-align: center;
+  font-weight: bold;
+  transition: background-color 0.2s ease;
+}
+
+.spotify-link:hover {
+  background-color: #168f3d;
+}
+
+.profile-link {
+  text-decoration: none;
+  color: #333;
+  background-color: #f0f0f0;
+  padding: 5px 10px;
+  border-radius: 4px;
+  font-weight: bold;
+  transition: background-color 0.2s ease;
+}
+
+.profile-link:hover {
+  background-color: #ddd;
+}
+
+/* ... (previous styles) ... */
+
+.sidebar-heading {
+  font-size: 20px;
+  font-weight: bold;
+  margin-bottom: 15px;
+  color: #333;
+}
+
+/* ... (previous styles) ... */
+
+
+.message {
+  text-align: center;
+  margin-top: 20px; /* Add some spacing between the social media section and the message */
+  padding: 10px 0;
+  background-color: #f0f0f0;
+  color: #333;
+}

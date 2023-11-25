@@ -1,0 +1,51 @@
+<!doctype html>
+<title>LastTip - Random reccomendation from my last.fm page</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='album.css') }}">
+
+
+
+{% if history %}
+<div class="container">
+    <div class="sidebar">
+      <h2 class="sidebar-heading">Previous suggestions</h2>
+    <ul class="album-list">
+      {% for suggestion in history %}
+      <li><a href="{{ suggestion.url }}">{{ suggestion.album.name }} - {{ suggestion.album.artist }} </a></li>
+      {% endfor %}
+    </ul>
+    </div>
+  </div>
+{% endif %}
+
+
+
+{% if album %}
+
+<div class="album-info"> 
+
+
+    {% if image %}
+    <img class="cover-art" src="{{ image }}" alt="Album Cover">
+    {% endif %}
+    <div class="details">
+      <h2 class="album-title">{{ album.name }}</h2>
+      <p class="artist">{{ album.artist }}</p>
+    <p class="play-count">Played {{ album.playcount }} times</p>
+
+      {% if url %}
+      <a class="spotify-link" href="{{ url }}" target="_blank">Listen on Spotify</a>
+      {% endif %}
+    </div>
+  </div>
+
+{% endif %}
+
+
+
+
+<script>
+    const newSuggestionLink = document.querySelector(".new-suggestion-link");
+    newSuggestionLink.addEventListener("click", function() {
+      location.reload();
+    });
+  </script>
