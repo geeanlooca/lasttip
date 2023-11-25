@@ -18,7 +18,6 @@ app = Flask(__name__)
 lastfm = LastFm.from_env()
 spotify = Spotify.from_env()
 lasttip = LastTip(lastfm, spotify)
-history = LastTipHistory(cache_file=HISTORY_CACHE_FILE)
 
 
 logging.basicConfig(
@@ -33,7 +32,6 @@ def random():
     logging.log(logging.INFO, "Fetching random album")
     suggestion = lasttip.get_suggestion()
 
-    history.add(suggestion)
 
     # Render the template HTML with the album details
     return render_template(
@@ -41,7 +39,6 @@ def random():
         album=suggestion.album,
         url=suggestion.url,
         image=suggestion.image,
-        history=history,
     )
 
 
