@@ -3,6 +3,9 @@
 .cache
 __pycache__
 venv/
+*.bak
+*.dat
+*.dir
 
 
 # Created by https://www.toptal.com/developers/gitignore/api/python
