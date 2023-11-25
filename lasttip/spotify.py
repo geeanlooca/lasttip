@@ -1,3 +1,4 @@
+import os
 from pprint import pprint
 import spotipy
 from spotipy.oauth2 import SpotifyClientCredentials
@@ -14,6 +15,9 @@ class Spotify:
         results = self.sp.search(q=artist_string, type="artist")
 
         return [(item["name"], item["uri"]) for item in results["artists"]["items"]]
+
+    def get_album_image(self, album_data):
+        return album_data["images"][0]["url"]
 
     def get_artist_album(self, artisti_uri: str):
         results = self.sp.artist_albums(artisti_uri, album_type="album")
@@ -40,3 +44,10 @@ class Spotify:
 
         album = results["tracks"]["items"][0]["album"]
         return album
+
+    @staticmethod
+    def from_env():
+        SPOTIFY_CLIENT_ID = os.environ["SPOTIFY_CLIENT_ID"]
+        SPOTIFY_CLIENT_SECRET = os.environ["SPOTIFY_CLIENT_SECRET"]
+        spotify = Spotify(SPOTIFY_CLIENT_ID, SPOTIFY_CLIENT_SECRET)
+        return spotify

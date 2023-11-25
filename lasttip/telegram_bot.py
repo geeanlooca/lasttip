@@ -1,9 +1,13 @@
+import asyncio
 import argparse
 import logging
 from tokenize import String
+from asyncio import Queue
 
 import telegram
 import telegram.ext
+from telegram.ext import CommandHandler, Updater, Application
+from telegram import Update
 
 from lasttip.lastfm import Album, LastFm
 from lasttip.spotify import Spotify
@@ -17,21 +21,24 @@ class TelegramLastFmBot:
         self.token = token
         self.lastfm = lastfm
         self.spotify = spotify
+        self.queue: Queue = Queue()
+        self.bot: telegram.Bot = telegram.Bot(token=token)
 
-        self.updater = telegram.ext.Updater(token=token)
-        self.dispatcher = self.updater.dispatcher
+        self.updater: Updater = telegram.ext.Updater(self.bot, self.queue)
+
+        self.application = Application.builder().token(token).build()
 
         start_handler = telegram.ext.CommandHandler("start", self.start)
         clear_cache_handler = telegram.ext.CommandHandler("clear", self.clear_cache)
         ping_handler = telegram.ext.CommandHandler("ping", self.ping)
         request_handler = telegram.ext.CommandHandler("request", self.request)
 
-        self.dispatcher.add_handler(start_handler)
-        self.dispatcher.add_handler(clear_cache_handler)
-        self.dispatcher.add_handler(ping_handler)
-        self.dispatcher.add_handler(request_handler)
+        self.application.add_handler(start_handler)
+        self.application.add_handler(clear_cache_handler)
+        self.application.add_handler(ping_handler)
+        self.application.add_handler(request_handler)
 
-    def request(self, update, context):
+    async def request(self, update, context):
         message = update.message.text.replace("/request ", "")
 
         context.bot.send_message(
@@ -40,7 +47,7 @@ class TelegramLastFmBot:
             parse_mode="MarkdownV2",
         )
 
-    def artist(self, update, context):
+    async def artist(self, update, context):
         message = update.message.text.replace("/artist ", "")
         result = self.spotify.search(message)
         context.bot.send_message(
@@ -49,12 +56,11 @@ class TelegramLastFmBot:
             parse_mode="MarkdownV2",
         )
 
-    def run(self, webhook=None, port: int = None):
-
+    async def run(self, webhook=None, port: int = None):
         if webhook:
             # run on heroku
             logging.info("Running for production using webhooks")
-            self.updater.start_webhook(
+            await self.updater.start_webhook(
                 listen="0.0.0.0",
                 port=port,
                 url_path=self.token,
@@ -65,9 +71,11 @@ class TelegramLastFmBot:
         else:
             # run locally
             logging.info("Running locally with polling")
-            self.updater.start_polling()
+            self.application.run_polling(allowed_updates=Update.ALL_TYPES)
 
-    def ping(self, update: telegram.Update, context: telegram.ext.CallbackContext):
+    async def ping(
+        self, update: telegram.Update, context: telegram.ext.CallbackContext
+    ):
         """Ping the bot and see if it is running."""
         context.bot.send_message(chat_id=update.effective_chat.id, text="I'm alive")
 
@@ -75,7 +83,7 @@ class TelegramLastFmBot:
     def escape(msg):
         reserved_chars = ["*", "_", "~", "-", "(", ")", ".", "!", "+"]
 
-        return msg.translate(str.maketrans({c: fr"\{c}" for c in reserved_chars}))
+        return msg.translate(str.maketrans({c: rf"\{c}" for c in reserved_chars}))
 
     @staticmethod
     def build_link_msg(text, url):
@@ -130,9 +138,8 @@ class TelegramLastFmBot:
         albums_msg = ""
 
         album_list = []
-        for (artist_name, uri) in self.spotify.get_artist_uris(random_album.artist):
-            for (album_name, album_url) in self.spotify.get_artist_album(uri):
-
+        for artist_name, uri in self.spotify.get_artist_uris(random_album.artist):
+            for album_name, album_url in self.spotify.get_artist_album(uri):
                 if album_name not in album_list:
                     album_list.append(album_name)
 
@@ -164,7 +171,7 @@ class TelegramLastFmBot:
         )
 
 
-def main():
+async def entry_point():
     parser = argparse.ArgumentParser()
     parser.add_argument("--production", action="store_true")
     args = parser.parse_args()
@@ -172,15 +179,10 @@ def main():
     dotenv.load_dotenv()
 
     BOT_TOKEN = os.environ["BOT_TOKEN"]
-    LASTFM_USER = os.environ["LASTFM_USER"]
     PORT = int(os.environ.get("PORT", "8443"))
-    SPOTIFY_CLIENT_ID = os.environ["SPOTIFY_CLIENT_ID"]
-    SPOTIFY_CLIENT_SECRET = os.environ["SPOTIFY_CLIENT_SECRET"]
-    API_KEY = os.environ["LASTFM_API_KEY"]
-    API_SECRET = os.environ["LASTFM_SHARED_SECRET"]
 
-    lastfm = LastFm(LASTFM_USER, API_KEY, API_SECRET)
-    spotify = Spotify(SPOTIFY_CLIENT_ID, SPOTIFY_CLIENT_SECRET)
+    lastfm = LastFm.from_env()
+    spotify = Spotify.from_env()
 
     logging.basicConfig(
         format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
@@ -188,4 +190,8 @@ def main():
     )
 
     bot = TelegramLastFmBot(BOT_TOKEN, lastfm, spotify)
-    bot.run(webhook=args.production, port=PORT)
+    await bot.run(webhook=args.production, port=PORT)
+
+
+def main():
+    asyncio.run(entry_point())
