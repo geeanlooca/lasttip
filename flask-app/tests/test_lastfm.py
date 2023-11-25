@@ -1,5 +1,6 @@
 import os
 import pytest
+from lasttip.spotify import Spotify
 from lasttip.lastfm import LastFm
 from dotenv import load_dotenv
 

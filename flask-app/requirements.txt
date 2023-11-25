@@ -1,2 +1,6 @@
-Flask==1.1.1
+Flask>=2.2.2
 gunicorn==20.0.4
+spotipy
+pytest
+python-dotenv
+black

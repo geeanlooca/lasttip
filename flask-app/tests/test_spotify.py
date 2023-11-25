@@ -1,12 +1,8 @@
 import os
 import json
-import lasttip.spotify
-import lasttip.telegram_bot
+from lasttip.spotify import Spotify
 from pprint import pprint
 import pytest
-import telegram
-import telegram.ext
-
 
 from dotenv import load_dotenv
 
@@ -15,7 +11,7 @@ load_dotenv()
 ID = os.environ["SPOTIFY_CLIENT_ID"]
 SECRET = os.environ["SPOTIFY_CLIENT_SECRET"]
 
-sp = lasttip.spotify.Spotify(ID, SECRET)
+sp = Spotify(ID, SECRET)
 
 
 def test_spotify_artist_search():

@@ -1,27 +1,53 @@
-from flask import Flask, request, jsonify
+import logging
 
+from flask import Flask
+from flask import render_template
+
+from lasttip.lastfm import LastFm
+from lasttip.spotify import Spotify
+from lasttip.lasttip import LastTip
+from lasttip.history import LastTipHistory
+
+from pprint import pprint
+
+
+HISTORY_CACHE_FILE = "history.shelve"
+
+# Instantiate the main components
 app = Flask(__name__)
+lastfm = LastFm.from_env()
+spotify = Spotify.from_env()
+lasttip = LastTip(lastfm, spotify)
+history = LastTipHistory(cache_file=HISTORY_CACHE_FILE)
 
-@app.route('/')
-def hello():
-	return "Hello World!"
 
-@app.route('/cache-me')
-def cache():
-	return "nginx will cache this response"
+logging.basicConfig(
+    format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
+    level=logging.INFO,
+)
 
-@app.route('/info')
-def info():
 
-	resp = {
-		'connecting_ip': request.headers['X-Real-IP'],
-		'proxy_ip': request.headers['X-Forwarded-For'],
-		'host': request.headers['Host'],
-		'user-agent': request.headers['User-Agent']
-	}
+@app.route("/")
+def random():
+    """Return a random album from Last.fm"""
+    logging.log(logging.INFO, "Fetching random album")
+    suggestion = lasttip.get_suggestion()
 
-	return jsonify(resp)
+    history.add(suggestion)
 
-@app.route('/flask-health-check')
-def flask_health_check():
-	return "success"
+    # Render the template HTML with the album details
+    return render_template(
+        "album.html",
+        album=suggestion.album,
+        url=suggestion.url,
+        image=suggestion.image,
+        history=history,
+    )
+
+
+@app.route("/reset")
+def reset():
+    """Reset the cache"""
+    logging.log(logging.INFO, "Clearing cache")
+    lastfm.clear_cache()
+    return random()
