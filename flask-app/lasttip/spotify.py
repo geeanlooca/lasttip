@@ -21,11 +21,11 @@ logger = logging.getLogger(__name__)
 
 @dataclass
 class SpotifyAlbumInfo:
-    album_url: str | None
-    artist_url: str | None
-    image_url: str | None
+    album_url: str
+    artist_url: str
+    image_url: str
     search_data: Dict[str, str]
-    uri: str | None
+    uri: str
 
 
 class Spotify:
