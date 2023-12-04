@@ -3,7 +3,8 @@ import random
 import requests
 from dataclasses import dataclass
 import shelve
-from typing import List
+from typing import List, Dict
+import pprint
 
 
 logging.basicConfig(
@@ -16,9 +17,12 @@ logger = logging.getLogger(__name__)
 @dataclass
 class Album:
     "Class for storing album data"
+
     name: str
     artist: str
     playcount: int
+    image_url: str
+    artist_url: str
 
     def __str__(self):
         return f"{self.artist} - {self.name} (played {self.playcount} times)"
@@ -30,6 +34,7 @@ class TopAlbums:
 
     albums: List[Album]
     metadata: dict
+    response_json: dict = None
 
 
 class LastFm:
@@ -90,15 +95,25 @@ class LastFm:
 
         return TopAlbums(albums=albums, metadata=info)
 
-    def get_top_albums(self, page: int = 1, limit: int = 250) -> TopAlbums:
+    def _send_api_request(self, url: str):
+        logger.debug(url)
+        response = requests.get(url)
+        json = response.json()
+        return json
+
+    def _build_api_url(self, page: int = 1, limit: int = 250) -> str:
         method_string = f"?method=user.gettopalbums&user={self.user}&api_key={self.key}&format=json&page={page}&limit={limit}"
         request_url = self.url + method_string
+        return request_url
 
-        logger.debug(request_url)
+    def _extract_album_image_url(self, image_data=List[Dict[str, str]]) -> str:
+        logger.debug("Extracting image url")
+        pprint.pprint(image_data)
+        return image_data[-1]["#text"]
 
-        response = requests.get(request_url)
-
-        json = response.json()
+    def get_top_albums(self, page: int = 1, limit: int = 250) -> TopAlbums:
+        request_url = self._build_api_url(page=page, limit=limit)
+        json = self._send_api_request(request_url)
 
         try:
             data = json["topalbums"]["album"]
@@ -107,10 +122,19 @@ class LastFm:
             for album_data in data:
                 artist_name = album_data["artist"]["name"]
                 album_name = album_data["name"]
+                album_image_data = album_data["image"]
+                image_url = self._extract_album_image_url(album_image_data)
+                artist_url = album_data["artist"]["url"]
                 playcount = int(album_data["playcount"])
-                album = Album(name=album_name, artist=artist_name, playcount=playcount)
+                album = Album(
+                    name=album_name,
+                    artist=artist_name,
+                    playcount=playcount,
+                    artist_url=artist_url,
+                    image_url=image_url,
+                )
                 albums.append(album)
-            return TopAlbums(albums=albums, metadata=metadata)
+            return TopAlbums(albums=albums, metadata=metadata, response_json=json)
 
         except KeyError as e:
             logger.error(f"KeyError: {e}")

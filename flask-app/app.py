@@ -6,7 +6,6 @@ from flask import render_template
 from lasttip.lastfm import LastFm
 from lasttip.spotify import Spotify
 from lasttip.lasttip import LastTip
-from lasttip.history import LastTipHistory
 
 from pprint import pprint
 
@@ -31,7 +30,6 @@ def random():
     """Return a random album from Last.fm"""
     logging.log(logging.INFO, "Fetching random album")
     suggestion = lasttip.get_suggestion()
-
 
     # Render the template HTML with the album details
     return render_template(

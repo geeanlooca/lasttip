@@ -32,3 +32,24 @@ def test_spotify_album_artist(artist):
         results = sp.sp.artist_albums(uri, album_type="album")
         for item in results["items"]:
             pprint(item["external_urls"])
+
+
+def test_spotify_search():
+    inputs = """Photek - Form & Function
+    Black Sabbath - Vol.4 
+    Fischerspooner - #1
+    Ricardo Villalobos - Sei Es Drum
+    Right Away, Great Captain! - The Church Of The Good Thief
+    Nirvana Bleach
+    Grateful Dead  The Grateful Dead
+    Metal Box - Public Image Ltd.
+    Within and Without Washed Out
+    Schacke  A Lot Of Chaos
+    CCCP Fedeli alla linea Affinità e Divertenze fra il compagno Togliatti e noi del conseguimento della maggiore età"""
+
+    for num, line in enumerate(inputs.splitlines()):
+        query = line.strip().replace("-", " ")
+        response = sp.search(query, type="album")
+
+        with open(f"test_spotify_search_response_{num}.json", "w") as f:
+            pprint(response, f)
