@@ -14,6 +14,7 @@ class LastTipHistory:
         cache_file (str, optional): File to store the history in. Defaults to None.
         max_length (int, optional): Maximum length of the history. Defaults to 10.
     """
+
     def __init__(self, cache_file: str = None, max_length: int = 10):
         self.max_length = max_length
         self.history = []
