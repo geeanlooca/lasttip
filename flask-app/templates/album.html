@@ -4,36 +4,21 @@
 
 
 
-{% if history %}
-<div class="container">
-    <div class="sidebar">
-      <h2 class="sidebar-heading">Previous suggestions</h2>
-    <ul class="album-list">
-      {% for suggestion in history %}
-      <li><a href="{{ suggestion.url }}">{{ suggestion.album.name }} - {{ suggestion.album.artist }} </a></li>
-      {% endfor %}
-    </ul>
-    </div>
-  </div>
-{% endif %}
-
-
-
-{% if album %}
+{% if suggestion %}
 
 <div class="album-info"> 
 
 
-    {% if image %}
-    <img class="cover-art" src="{{ image }}" alt="Album Cover">
+    {% if suggestion.image %}
+    <img class="cover-art" src="{{ suggestion.image }}" alt="Album Cover">
     {% endif %}
     <div class="details">
-      <h2 class="album-title">{{ album.name }}</h2>
-      <p class="artist">{{ album.artist }}</p>
-    <p class="play-count">Played {{ album.playcount }} times</p>
+      <h2 class="album-title">{{ suggestion.album_name }}</h2>
+      <a href="{{ suggestion.artist_url}}" class="artist">{{ suggestion.album_artist }}</a>
+    <p class="play-count">Played {{ suggestion.playcount }} times</p>
 
-      {% if url %}
-      <a class="spotify-link" href="{{ url }}" target="_blank">Listen on Spotify</a>
+      {% if suggestion.url %}
+      <a class="spotify-link" href="{{ suggestion.url }}" target="_blank">Listen on Spotify</a>
       {% endif %}
     </div>
   </div>

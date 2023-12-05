@@ -7,7 +7,9 @@ from dataclasses import dataclass
 
 @dataclass
 class LastTipSuggestion:
-    album: lasttip.lastfm.Album
+    album_name: str
+    album_artist: str
+    playcount: int
     url: str
     image: str
     spotify_data: str
@@ -26,11 +28,13 @@ class LastTip:
             # remove the dash symbol to get better spotify results
             result = self.query_strategy.query(spotify=self.spotify, album=album)
             suggestion = LastTipSuggestion(
-                album,
-                result.album_url,
-                result.image_url,
-                result.search_data,
-                result.artist_url,
+                album_name=album.name,
+                album_artist=album.artist,
+                url=result.album_url,
+                image=result.image_url,
+                spotify_data=result.search_data,
+                artist_url=result.artist_url,
+                playcount=album.playcount,
             )
 
             return suggestion

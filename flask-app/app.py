@@ -30,12 +30,12 @@ def random():
     logging.log(logging.INFO, "Fetching random album")
     suggestion = lasttip.get_suggestion()
 
+    logging.log(logging.INFO, suggestion)
+
     # Render the template HTML with the album details
     return render_template(
         "album.html",
-        album=suggestion.album,
-        url=suggestion.url,
-        image=suggestion.image,
+        suggestion=suggestion
     )
 
 
