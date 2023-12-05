@@ -1,5 +1,4 @@
 import os
-import json
 from lasttip.spotify import Spotify
 from pprint import pprint
 import pytest

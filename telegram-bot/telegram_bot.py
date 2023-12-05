@@ -6,7 +6,7 @@ from asyncio import Queue
 
 import telegram
 import telegram.ext
-from telegram.ext import CommandHandler, Updater, Application
+from telegram.ext import Updater, Application
 from telegram import Update
 
 from lasttip.lastfm import Album, LastFm

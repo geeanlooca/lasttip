@@ -89,9 +89,9 @@ def get_best_album_match(response: dict, album: lasttip.lastfm.Album):
 
     scores = [compute_score(album_) for album_ in albums]
 
-    logger.warn(f"Finding best match for {album.artist} - {album.name}")
+    logger.warning(f"Finding best match for {album.artist} - {album.name}")
     for album_, score in zip(albums, scores):
-        logger.warn(f"{album_['name']} - {album_['artists'][0]['name']} => {score}")
+        logger.warning(f"{album_['name']} - {album_['artists'][0]['name']} => {score}")
 
     max_score = max(scores)
     max_index = scores.index(max_score)
@@ -104,10 +104,6 @@ class BasicSpotifyQuery(SpotifyQueryStrategy):
         search_result = spotify.search(spotify_query, type="album")
 
         search_result["query"] = spotify_query
-        # save the search result to a file
-        with open("spotify_search_result.json", "w") as f:
-            json.dump(search_result, f)
-
         album_data, score = get_best_album_match(search_result, album)
 
         if score < SIMILARITY_SCORE_THRESHOLD:

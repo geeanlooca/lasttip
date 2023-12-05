@@ -7,7 +7,6 @@ from lasttip.lastfm import LastFm
 from lasttip.spotify import Spotify
 from lasttip.lasttip import LastTip
 
-from pprint import pprint
 
 
 HISTORY_CACHE_FILE = "history.shelve"

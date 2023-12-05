@@ -14,6 +14,10 @@ def string_similarity(str1, str2):
     Perform bigram comparison between two strings
     and return a percentage match in decimal form.
     """
+
+    if len(str1) < 2 or len(str2) < 2:
+        return 0 if str1[:1] != str2[:1] else 1
+
     pairs1 = get_bigrams(str1)
     pairs2 = get_bigrams(str2)
     union = len(pairs1) + len(pairs2)

@@ -1,10 +1,7 @@
-import os
 import pytest
-from lasttip.spotify import Spotify
 from lasttip.lastfm import LastFm
 from dotenv import load_dotenv
 from pprint import pprint
-from typing import List, Dict
 import json
 
 load_dotenv()
