@@ -4,9 +4,6 @@ from lasttip.recommender import AlbumSuggestion
 from lasttip.recommender import Recommender
 
 
-
-
-
 class LastTip(Recommender):
     def __init__(self, lastfm: lasttip.lastfm.LastFm, spotify: lasttip.spotify.Spotify):
         self.lastfm = lastfm

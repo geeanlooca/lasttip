@@ -1,6 +1,7 @@
 from dataclasses import dataclass
 from abc import ABC, abstractmethod
 
+
 @dataclass
 class AlbumSuggestion:
     album_name: str
@@ -12,9 +13,7 @@ class AlbumSuggestion:
     artist_url: str
 
 
-
 class Recommender(ABC):
     @abstractmethod
     def get_suggestion(self, *args, **kwargs) -> AlbumSuggestion:
         pass
-
