@@ -1,33 +1,24 @@
 import lasttip.lastfm
 import lasttip.spotify
+from lasttip.recommender import AlbumSuggestion
+from lasttip.recommender import Recommender
 
 
-from dataclasses import dataclass
 
 
-@dataclass
-class LastTipSuggestion:
-    album_name: str
-    album_artist: str
-    playcount: int
-    url: str
-    image: str
-    spotify_data: str
-    artist_url: str
 
-
-class LastTip:
+class LastTip(Recommender):
     def __init__(self, lastfm: lasttip.lastfm.LastFm, spotify: lasttip.spotify.Spotify):
         self.lastfm = lastfm
         self.spotify = spotify
         self.query_strategy = lasttip.spotify.BasicSpotifyQuery()
 
-    def get_suggestion(self, playcount_min=10, limit=10) -> LastTipSuggestion:
+    def get_suggestion(self, playcount_min=10, limit=10) -> AlbumSuggestion:
         album = self.lastfm.pick_random(playcount_min=10)
         try:
             # remove the dash symbol to get better spotify results
             result = self.query_strategy.query(spotify=self.spotify, album=album)
-            suggestion = LastTipSuggestion(
+            suggestion = AlbumSuggestion(
                 album_name=album.name,
                 album_artist=album.artist,
                 url=result.album_url,
@@ -40,4 +31,4 @@ class LastTip:
             return suggestion
 
         except IndexError:
-            return LastTipSuggestion(album, None, None, None, None)
+            return AlbumSuggestion(album, None, None, None, None)
