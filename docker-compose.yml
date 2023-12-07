@@ -18,6 +18,15 @@ services:
       retries: 3
     command: gunicorn -w 3 -t 60 -b 0.0.0.0:8000 app:app
 
+  telegram-bot:
+    env_file:
+      - .env
+    build: telegram-bot
+    restart: always
+    ports:
+      - '8443:8443'
+    command: python3 telegram_bot.py --production
+
   nginx-proxy:
     build: nginx
     restart: always
