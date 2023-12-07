@@ -2,7 +2,8 @@ import os
 import logging
 import pprint
 import spotipy
-from spotipy.oauth2 import SpotifyClientCredentials
+from spotipy.cache_handler import CacheFileHandler
+from spotipy.oauth2 import SpotifyClientCredentials, SpotifyOAuth
 import json
 import lasttip.lastfm
 from dataclasses import dataclass
@@ -65,7 +66,21 @@ class Spotify:
     def from_env():
         SPOTIFY_CLIENT_ID = os.environ["SPOTIFY_CLIENT_ID"]
         SPOTIFY_CLIENT_SECRET = os.environ["SPOTIFY_CLIENT_SECRET"]
-        spotify = Spotify(SPOTIFY_CLIENT_ID, SPOTIFY_CLIENT_SECRET)
+        SPOTIFY_REDIRECT_URI = os.environ["SPOTIPY_REDIRECT_URI"]
+
+        scope = "user-library-read"
+        cache_handler = CacheFileHandler(username="geeanlooca")
+
+        spotify = spotipy.Spotify(
+            auth_manager=SpotifyOAuth(
+                client_id=SPOTIFY_CLIENT_ID,
+                client_secret=SPOTIFY_CLIENT_SECRET,
+                redirect_uri=SPOTIFY_REDIRECT_URI,
+                scope=scope,
+                cache_handler=cache_handler,
+                open_browser=False,
+            )
+        )
         return spotify
 
 

@@ -1,21 +1,21 @@
 import logging
+import random
 
-from flask import Flask
+from flask import Flask, redirect
 from flask import render_template
 
 from lasttip.lastfm import LastFm
 from lasttip.spotify import Spotify
 from lasttip.lasttip import LastTip
+from lasttip.spotifytip import SpotifyTip
 
-
-
-HISTORY_CACHE_FILE = "history.shelve"
 
 # Instantiate the main components
 app = Flask(__name__)
 lastfm = LastFm.from_env()
 spotify = Spotify.from_env()
 lasttip = LastTip(lastfm, spotify)
+spotifytip = SpotifyTip(spotify)
 
 
 logging.basicConfig(
@@ -25,23 +25,32 @@ logging.basicConfig(
 
 
 @app.route("/")
-def random():
+def index():
+    """Return the index page"""
+    # toin coss
+    if random.randint(0, 1) == 0:
+        return redirect("/spotify")
+    else:
+        return redirect("/lastfm")
+
+
+@app.route("/lastfm")
+def lastfm():
     """Return a random album from Last.fm"""
     logging.log(logging.INFO, "Fetching random album")
     suggestion = lasttip.get_suggestion()
 
+    logging.log(logging.INFO, suggestion)
+
     # Render the template HTML with the album details
-    return render_template(
-        "album.html",
-        album=suggestion.album,
-        url=suggestion.url,
-        image=suggestion.image,
-    )
+    return render_template("album.html", suggestion=suggestion)
 
 
-@app.route("/reset")
-def reset():
-    """Reset the cache"""
-    logging.log(logging.INFO, "Clearing cache")
-    lastfm.clear_cache()
-    return random()
+@app.route("/spotify")
+def spotify():
+    """Return a random album from Spotify"""
+    suggestion = spotifytip.get_suggestion()
+
+    logging.log(logging.INFO, suggestion)
+    # Render the template HTML with the album details
+    return render_template("album.html", suggestion=suggestion)
