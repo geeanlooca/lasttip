@@ -25,6 +25,7 @@ services:
     restart: always
     ports:
       - '8443:8443'
+      - '8444:80'
     command: python3 telegram_bot.py --production
 
   nginx-proxy:
@@ -35,7 +36,7 @@ services:
     environment:
       - FLASK_SERVER_ADDR=flask-app:8000
     ports:
-      - "8080:80"
+      - "8181:80"
     depends_on:
       - flask-app
     healthcheck:
