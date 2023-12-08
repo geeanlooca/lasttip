@@ -26,8 +26,8 @@ class LastTipHistory:
             try:
                 with shelve.open(self.cache_file) as d:
                     self.history = d["history"]
-            except:
-                pass
+            except Exception as e:
+                logging.log(logging.ERROR, f"Error checking history file: {e}")
 
     def add(self, suggestion: LastTipSuggestion) -> None:
         self.history.append(suggestion)
@@ -43,8 +43,8 @@ class LastTipHistory:
             try:
                 with shelve.open(cache_file) as d:
                     d["history"] = self.history
-            except:
-                pass
+            except Exception as e:
+                logging.log(logging.ERROR, f"Error saving history file: {e}")
 
     def get(self) -> List[LastTipSuggestion]:
         return reversed(self.history)

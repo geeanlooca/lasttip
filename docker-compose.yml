@@ -30,7 +30,7 @@ services:
     ports:
       - '8443:8443'
       - '8444:80'
-    command: python3 telegram_bot.py 
+    command: python3 telegram_bot.py
 
   nginx-proxy:
     build: nginx

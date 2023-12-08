@@ -34,6 +34,7 @@ def index():
     else:
         return redirect("/lastfm")
 
+
 @app.route("/json")
 def index_json():
     # toin coss
@@ -42,6 +43,7 @@ def index_json():
     else:
         return redirect("/lastfm_json")
 
+
 @app.route("/lastfm_json")
 def lastfm_json():
     """Return a random album from Last.fm"""
@@ -49,6 +51,7 @@ def lastfm_json():
     suggestion = lasttip.get_suggestion()
     logging.log(logging.INFO, suggestion)
     return jsonify(suggestion)
+
 
 @app.route("/spotify_json")
 def spotify_json():

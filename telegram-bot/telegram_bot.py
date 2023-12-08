@@ -1,5 +1,3 @@
-import asyncio
-import argparse
 import logging
 from tokenize import String
 from asyncio import Queue
@@ -12,10 +10,11 @@ from typing import Callable
 
 import os
 
+
 class BackendInterface:
     def __init__(self, url) -> None:
         self.url = url
-    
+
     def send_request(self, url):
         logging.info(f"Sending request to {url}")
         return requests.get(url).json()
@@ -23,7 +22,7 @@ class BackendInterface:
     def index(self):
         logging.info("Fetching random album from index")
         return self.send_request(self.url + "/json")
-    
+
     def lastfm(self):
         logging.info("Fetching random album from lastfm")
         return self.send_request(self.url + "/lastfm_json")
@@ -31,7 +30,6 @@ class BackendInterface:
     def spotify(self):
         logging.info("Fetching random album from spotify")
         return self.send_request(self.url + "/spotify_json")
-        
 
 
 class TelegramLastFmBot:
@@ -45,9 +43,15 @@ class TelegramLastFmBot:
 
         self.application = Application.builder().token(token).build()
 
-        start_handler = telegram.ext.CommandHandler("start", lambda x, y: self.start(x, y, self.backend.index))
-        lastfm_handler = telegram.ext.CommandHandler("lastfm", lambda x, y: self.start(x, y, self.backend.lastfm))
-        spotify_handler = telegram.ext.CommandHandler("spotify", lambda x, y: self.start(x, y, self.backend.spotify))
+        start_handler = telegram.ext.CommandHandler(
+            "start", lambda x, y: self.start(x, y, self.backend.index)
+        )
+        lastfm_handler = telegram.ext.CommandHandler(
+            "lastfm", lambda x, y: self.start(x, y, self.backend.lastfm)
+        )
+        spotify_handler = telegram.ext.CommandHandler(
+            "spotify", lambda x, y: self.start(x, y, self.backend.spotify)
+        )
         request_handler = telegram.ext.CommandHandler("request", self.request)
 
         self.application.add_handler(start_handler)
@@ -87,10 +91,9 @@ class TelegramLastFmBot:
         return message
 
     def build_album_message(self, album):
-
         album_name = album["album_name"]
         album_artist = album["album_artist"]
-        album_str = f"{album_artist} - {album_name}" 
+        album_str = f"{album_artist} - {album_name}"
         url = album["url"]
 
         logging.debug(f"Random album picked: {album_str}")
@@ -102,8 +105,12 @@ class TelegramLastFmBot:
 
         return message
 
-
-    async def start(self, update: telegram.Update, context: telegram.ext.CallbackContext, api_call: Callable):
+    async def start(
+        self,
+        update: telegram.Update,
+        context: telegram.ext.CallbackContext,
+        api_call: Callable,
+    ):
         """Get a random album from my last.fm profile."""
 
         logging.info("Fetching random album")
@@ -111,6 +118,9 @@ class TelegramLastFmBot:
         try:
             album = api_call()
             message = self.build_album_message(album)
+            message += (
+                "\n\nYou can request a new album with /start, /lastfm or /spotify"
+            )
 
             await context.bot.send_message(
                 chat_id=update.effective_chat.id,
@@ -118,10 +128,6 @@ class TelegramLastFmBot:
                 parse_mode="MarkdownV2",
             )
 
-            await context.bot.send_message(
-                chat_id=update.effective_chat.id,
-                text="You can request a new album with /start, /lastfm or /spotify",
-            )
         except telegram.error.BadRequest as bad_request:
             logging.error(f"BadRequest: {bad_request.message}")
             logging.error(f"BadRequest: {message}")
@@ -138,19 +144,13 @@ class TelegramLastFmBot:
             )
 
 
-
 def entry_point():
-    parser = argparse.ArgumentParser()
-    parser.add_argument("--production", action="store_true")
-    args = parser.parse_args()
-
     logging.basicConfig(
         format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
-        level=logging.INFO
+        level=logging.INFO,
     )
 
-
-    PORT = 8443 
+    PORT = 8443
     BOT_TOKEN = os.environ["TELEGRAM_TOKEN"]
     API_URL = os.environ.get("LASTTIP_API_URL")
 
