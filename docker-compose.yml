@@ -18,6 +18,20 @@ services:
       retries: 3
     command: gunicorn -w 3 -t 60 -b 0.0.0.0:8000 app:app
 
+  telegram-bot:
+    depends_on:
+      - flask-app
+    env_file:
+      - .env
+    environment:
+      - LASTTIP_API_URL=http://nginx-proxy:80
+    build: telegram-bot
+    restart: always
+    ports:
+      - '8443:8443'
+      - '8444:80'
+    command: python3 telegram_bot.py 
+
   nginx-proxy:
     build: nginx
     restart: always
@@ -26,7 +40,7 @@ services:
     environment:
       - FLASK_SERVER_ADDR=flask-app:8000
     ports:
-      - "8080:80"
+      - "8181:80"
     depends_on:
       - flask-app
     healthcheck:
