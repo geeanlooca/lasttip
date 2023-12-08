@@ -27,7 +27,7 @@ body {
 
 .album-list {
 /* dotted items*/
-  list-style-type: square;   
+  list-style-type: square;
   padding: 10;
 }
 

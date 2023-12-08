@@ -6,7 +6,7 @@
 
 {% if suggestion %}
 
-<div class="album-info"> 
+<div class="album-info">
 
 
     {% if suggestion.image %}
@@ -15,14 +15,14 @@
     <div class="details">
       <h2 class="album-title">{{ suggestion.album_name }}</h2>
       <a href="{{ suggestion.artist_url}}" class="artist">{{ suggestion.album_artist }}</a>
-      
+
       <p class="play-count">{% if suggestion.playcount %}Played {{ suggestion.playcount }} times{% endif %}</p>
-      
+
 
       {% if suggestion.url %}
       <a class="spotify-link" href="{{ suggestion.url }}" target="_blank">Listen on Spotify</a>
       {% endif %}
-      <p> Get another suggestion from <a class="new-suggestion-link" href="/spotify">Spotify</a> or 
+      <p> Get another suggestion from <a class="new-suggestion-link" href="/spotify">Spotify</a> or
       <a class="new-suggestion-link" href="/lastfm">last.fm</a></p>
     </div>
   </div>

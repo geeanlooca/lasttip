@@ -35,7 +35,7 @@ def test_spotify_album_artist(artist):
 
 def test_spotify_search():
     inputs = """Photek - Form & Function
-    Black Sabbath - Vol.4 
+    Black Sabbath - Vol.4
     Fischerspooner - #1
     Ricardo Villalobos - Sei Es Drum
     Right Away, Great Captain! - The Church Of The Good Thief
