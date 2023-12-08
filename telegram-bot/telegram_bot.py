@@ -11,7 +11,6 @@ import requests
 from typing import Callable
 
 import os
-import dotenv
 
 class BackendInterface:
     def __init__(self, url) -> None:
@@ -65,7 +64,7 @@ class TelegramLastFmBot:
             parse_mode="MarkdownV2",
         )
 
-    def run(self, webhook=None, port: int = None):
+    def run(self, port: int = None):
         # run locally
         logging.info("Running locally with polling")
         self.application.run_polling(allowed_updates=Update.ALL_TYPES)
@@ -133,7 +132,6 @@ class TelegramLastFmBot:
             )
         except Exception as e:
             logging.error(f"Exception: {e}")
-            logging.error(album)
             await context.bot.send_message(
                 chat_id=update.effective_chat.id,
                 text=f"Exception: {e}",
@@ -151,22 +149,14 @@ def entry_point():
         level=logging.INFO
     )
 
-    dotenv.load_dotenv()
-
-    if args.production:
-        BOT_TOKEN = os.environ["TELEGRAM_TOKEN"]
-    else:
-        BOT_TOKEN = os.environ["TELEGRAM_DEBUG_TOKEN"]
 
     PORT = 8443 
-    API_URL = os.environ.get("LASTTIP_API_URL") if args.production else os.environ.get("LASTTIP_API_LOCAL")
-
-
-    logging.info(f"Using API URL: {API_URL}")
+    BOT_TOKEN = os.environ["TELEGRAM_TOKEN"]
+    API_URL = os.environ.get("LASTTIP_API_URL")
 
     api = BackendInterface(API_URL)
     bot = TelegramLastFmBot(BOT_TOKEN, api)
-    bot.run(webhook=args.production, port=PORT)
+    bot.run(port=PORT)
 
 
 def main():

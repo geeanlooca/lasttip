@@ -23,4 +23,4 @@ RUN python -m venv $VIRTUAL_ENV
 ENV PATH="$VIRTUAL_ENV/bin:$PATH"
 RUN pip install -r requirements.txt
 
-CMD ["python", "telegram_bot.py --production"]
+CMD ["python", "telegram_bot.py"]
