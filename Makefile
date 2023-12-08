@@ -3,8 +3,7 @@ dev:
 	docker-compose up -d
 
 run:
-	docker-compose build 
-	docker-compose up -d
+	docker-compose up --build -d
 
 
 logs:
