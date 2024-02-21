@@ -9,6 +9,8 @@ from lasttip.lastfm import LastFm
 from lasttip.spotify import Spotify
 from lasttip.lasttip import LastTip
 from lasttip.spotifytip import SpotifyTip
+from lasttip.recommender import AlbumSuggestion
+from render import render_suggestion
 
 
 # Instantiate the main components
@@ -69,7 +71,7 @@ def lastfm():
     logging.log(logging.INFO, suggestion)
 
     # Render the template HTML with the album details
-    return render_template("album.html", suggestion=suggestion)
+    return render_suggestion(suggestion)
 
 
 @app.route("/spotify")
@@ -78,5 +80,8 @@ def spotify():
     suggestion = spotifytip.get_suggestion()
 
     logging.log(logging.INFO, suggestion)
+
     # Render the template HTML with the album details
-    return render_template("album.html", suggestion=suggestion)
+    return render_suggestion(suggestion)
+
+
