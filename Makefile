@@ -1,6 +1,10 @@
+build: 
+	docker-compose build
+
 dev:
 	docker-compose build flask-app
 	docker-compose up -d
+
 
 run:
 	docker-compose up --build -d
