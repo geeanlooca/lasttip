@@ -1,18 +1,6 @@
 import lasttip.similarity
-import os
 import json
-from lasttip.spotify import Spotify
 from lasttip.spotify import get_best_album_match
-
-from dotenv import load_dotenv
-
-load_dotenv()
-
-ID = os.environ["SPOTIFY_CLIENT_ID"]
-SECRET = os.environ["SPOTIFY_CLIENT_SECRET"]
-
-sp = Spotify(ID, SECRET)
-
 
 def test_query():
     spotify_query = "Ø Konstellaatio"
