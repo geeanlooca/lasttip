@@ -8,13 +8,16 @@
 
 <div class="album-info">
 
-
     {% if suggestion.image %}
     <img class="cover-art" src="{{ suggestion.image }}" alt="Album Cover">
     {% endif %}
     <div class="details">
       <h2 class="album-title">{{ suggestion.album_name }}</h2>
-      <a href="{{ suggestion.artist_url}}" class="artist">{{ suggestion.album_artist }}</a>
+      {% if suggestion.artist_url %} 
+          <a href="{{ suggestion.artist_url}}" class="artist">{{ suggestion.album_artist }}</a>
+      {% else %}
+          <a class="artist">{{ suggestion.album_artist }}</a>
+      {% endif %}
 
       <p class="play-count">{% if suggestion.playcount %}Played {{ suggestion.playcount }} times{% endif %}</p>
 
