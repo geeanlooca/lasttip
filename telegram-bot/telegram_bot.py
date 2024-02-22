@@ -152,7 +152,7 @@ def entry_point():
 
     PORT = 8443
 
-    environment = os.environ.get("ENVIRONMENT") 
+    environment = os.environ.get("ENVIRONMENT")
     running_prod = environment and environment.lower() == "prod"
 
     if running_prod:
@@ -160,8 +160,11 @@ def entry_point():
     else:
         logging.warn("Running in development settings.")
 
-
-    BOT_TOKEN = os.environ["TELEGRAM_TOKEN"] if running_prod else os.environ["TELEGRAM_DEBUG_TOKEN"]
+    BOT_TOKEN = (
+        os.environ["TELEGRAM_TOKEN"]
+        if running_prod
+        else os.environ["TELEGRAM_DEBUG_TOKEN"]
+    )
     API_URL = os.environ.get("LASTTIP_API_URL")
 
     api = BackendInterface(API_URL)

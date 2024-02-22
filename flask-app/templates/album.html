@@ -13,7 +13,7 @@
     {% endif %}
     <div class="details">
       <h2 class="album-title">{{ suggestion.album_name }}</h2>
-      {% if suggestion.artist_url %} 
+      {% if suggestion.artist_url %}
           <a href="{{ suggestion.artist_url}}" class="artist">{{ suggestion.album_artist }}</a>
       {% else %}
           <a class="artist">{{ suggestion.album_artist }}</a>

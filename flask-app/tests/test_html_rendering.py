@@ -4,14 +4,12 @@ from lasttip.recommender import AlbumSuggestion
 import json
 import os
 
-from flask import Flask, redirect
-from flask import render_template
-from flask import jsonify
+from flask import Flask
 from flask import template_rendered
+
 
 @pytest.fixture
 def null_artist_link_suggestion() -> AlbumSuggestion:
-
     # current path
     current_path = os.path.dirname(os.path.realpath(__file__))
     json_file = os.path.join(current_path, "empty_artist_link.json")
@@ -27,8 +25,9 @@ def null_artist_link_suggestion() -> AlbumSuggestion:
             image=response["image"],
             spotify_data=response["spotify_data"],
             artist_url=response["artist_url"],
-            playcount=response["playcount"]
+            playcount=response["playcount"],
         )
+
 
 @pytest.fixture
 def app(null_artist_link_suggestion):
@@ -40,7 +39,7 @@ def app(null_artist_link_suggestion):
 
     @_app.route("/test")
     def test():
-        rendered_response =  render_suggestion(null_artist_link_suggestion)
+        rendered_response = render_suggestion(null_artist_link_suggestion)
         return rendered_response
 
     ctx = _app.test_request_context()
@@ -50,10 +49,12 @@ def app(null_artist_link_suggestion):
 
     ctx.pop()
 
+
 @pytest.fixture
 def captured_templates(app):
     print("Creating captured_templates fixture")
     recorded = []
+
     def record(sender, template, context, **extra):
         recorded.append((template, context))
 
@@ -68,5 +69,3 @@ def test_view(app, captured_templates):
     response = app.get("/test")
     print(captured_templates)
     print(response)
-
-

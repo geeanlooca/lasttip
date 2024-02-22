@@ -2,6 +2,7 @@ import lasttip.similarity
 import json
 from lasttip.spotify import get_best_album_match
 
+
 def test_query():
     spotify_query = "Ø Konstellaatio"
     album = lasttip.lastfm.Album("Konstellaatio", "Ø", 10, "", None)

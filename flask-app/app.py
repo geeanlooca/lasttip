@@ -2,14 +2,12 @@ import logging
 import random
 
 from flask import Flask, redirect
-from flask import render_template
 from flask import jsonify
 
 from lasttip.lastfm import LastFm
 from lasttip.spotify import Spotify
 from lasttip.lasttip import LastTip
 from lasttip.spotifytip import SpotifyTip
-from lasttip.recommender import AlbumSuggestion
 from render import render_suggestion
 
 
@@ -83,5 +81,3 @@ def spotify():
 
     # Render the template HTML with the album details
     return render_suggestion(suggestion)
-
-

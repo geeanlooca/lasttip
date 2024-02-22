@@ -1,4 +1,4 @@
-build: 
+build:
 	docker-compose build
 
 dev:
