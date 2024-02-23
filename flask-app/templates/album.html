@@ -13,10 +13,10 @@
     {% endif %}
     <div class="details">
       <h2 class="album-title">{{ suggestion.album_name }}</h2>
-      {% if suggestion.artist_url %} 
+      {% if suggestion.artist_url and suggestion.artist_url is not none %} 
           <a href="{{ suggestion.artist_url}}" class="artist">{{ suggestion.album_artist }}</a>
       {% else %}
-          <a class="artist">{{ suggestion.album_artist }}</a>
+          <a class="artist" href="#">{{ suggestion.album_artist }}</a>
       {% endif %}
 
       <p class="play-count">{% if suggestion.playcount %}Played {{ suggestion.playcount }} times{% endif %}</p>
